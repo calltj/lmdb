@@ -1,0 +1,607 @@
+
+===============================
+RIVAS STREAMING APP - POSTMAN GUIDE
+===============================
+
+1. SIGNUP (via Identity API)
+-
+Function: Register a new user
+URL: http://localhost:7000/signup
+Method: POST
+Body (JSON):
+{
+  "name": "Jane Doe",
+  "email": "janedoe@example.com",
+  "age": 22
+}
+
+2. LOGIN (via Identity API)
+
+Function: Log in a user using email
+URL: http://localhost:7000/login
+Method: POST
+Body (JSON):
+{
+  "email": "janedoe@example.com"
+}
+
+3. GET USER PROFILE (via Identity API)
+
+Function: Get user profile (by userId)
+URL: http://localhost:7000/profile/<userId>
+Method: GET
+(No body required)
+
+4. ADD TO WATCHLIST
+-
+Function: Add a movie to user's watchlist
+URL: http://localhost:7000/add-to-watchlist
+Method: POST
+Body (JSON):
+{
+  "userId": "1720671049327-ks8xj",
+  "movieId": "MOV123"
+}
+
+5. UPDATE WATCH PROGRESS
+
+Function: Save or update progress for a movie
+URL: http://localhost:7000/update-watch-progress
+Method: POST
+Body (JSON):
+{
+  "userId": "1720671049327-ks8xj",
+  "movieId": "MOV123",
+  "progress": 45
+}
+
+6. RATE MOVIE
+
+Function: Submit rating for a movie
+URL: http://localhost:7000/rate-movie
+Method: POST
+Body (JSON):
+{
+  "userId": "1720671049327-ks8xj",
+  "movieId": "MOV123",
+  "rating": 4.5
+}
+
+7. STREAM MOVIE
+
+Function: Simulate a movie stream session
+URL: http://localhost:7000/stream/MOV123
+Method: GET
+(No body required)
+
+
+
+===============================
+E-COMMERCE APP - POSTMAN GUIDE
+===============================
+
+1. SIGNUP (via Identity API)
+-
+Function: Register a new user
+URL: http://localhost:6000/signup
+Method: POST
+Body (JSON):
+{
+  "name": "John Doe",
+  "email": "johndoe@example.com",
+  "age": 30
+}
+
+2. LOGIN (via Identity API)
+
+Function: Log in a user using email
+URL: http://localhost:6000/login
+Method: POST
+Body (JSON):
+{
+  "email": "johndoe@example.com"
+}
+
+3. GET USER PROFILE (via Identity API)
+
+Function: Get user profile (by userId)
+URL: http://localhost:6000/profile/<userId>
+Method: GET
+(No body required)
+
+4. CHECK BALANCE
+-
+Function: View user account balance
+URL: http://localhost:6000/check-balance/<userId>
+Method: GET
+(No body required)
+
+5. ADD TO CART
+
+Function: Add product to user cart
+URL: http://localhost:6000/add-to-cart
+Method: POST
+Body (JSON):
+{
+  "userId": "1720671049327-ks8xj",
+  "productId": "PROD456",
+  "quantity": 2
+}
+
+6. CHECKOUT
+
+Function: Process cart and deduct balance
+URL: http://localhost:6000/checkout
+Method: POST
+Body (JSON):
+{
+  "userId": "1720671049327-ks8xj",
+  "total": 5000
+}
+
+
+
+ 🚦 PUBLIC
+
+ API Status
+
+URL: http://localhost:8000/
+Method: GET
+Description: Check if the API is running.
+No headers or body needed.
+
+
+
+ 👤 DRIVERS (15 ENDPOINTS)
+
+ Create Driver
+
+URL: http://localhost:8000/drivers
+Method: POSTj
+Header:
+Authorization: Bearer <token>
+Content-Type: application/json
+Body:
+
+json
+{
+  "name": "James",
+  "email": "james@hub.com",
+  "licenseNo": "DRV123",
+  "vehicle": "Toyota"
+}
+
+
+
+
+ Get All Drivers
+
+URL: http://localhost:8000/drivers
+Method: GET
+No headers or body.
+
+
+
+ Get Driver by ID
+
+URL: http://localhost:8000/drivers/<driverId>
+Method: GET
+No headers or body.
+
+
+
+ Update Driver Name
+
+URL: http://localhost:8000/drivers/<driverId>/name
+Method: PUT
+Header: Authorization: Bearer <token>
+Body:
+
+json
+{ "name": "Updated Name" }
+
+
+
+
+ Update Driver Location
+
+URL: http://localhost:8000/drivers/<driverId>/location
+Method: PUT
+Header: Authorization: Bearer <token>
+Body:
+
+json
+{ "location": "Lagos" }
+
+
+
+
+ Update Driver Vehicle
+
+URL: http://localhost:8000/drivers/<driverId>/vehicle
+Method: PUT
+Header: Authorization: Bearer <token>
+Body:
+
+json
+{ "vehicle": "Honda Civic" }
+
+
+
+
+ Update Driver Status
+
+URL: http://localhost:8000/drivers/<driverId>/status
+Method: PUT
+Header: Authorization: Bearer <token>
+Body:
+
+json
+{ "status": "available" }
+
+
+
+
+ Increment Trip Count
+
+URL: http://localhost:8000/drivers/<driverId>/increment-trips
+Method: POST
+Header: Authorization: Bearer <token>
+No body.
+
+
+
+ Add Earnings
+
+URL: http://localhost:8000/drivers/<driverId>/add-earning
+Method: POST
+Header: Authorization: Bearer <token>
+Body:
+
+json
+{ "amount": 2500 }
+
+
+
+
+ Delete Driver
+
+URL: http://localhost:8000/drivers/<driverId>
+Method: DELETE
+Header: Authorization: Bearer <token>
+No body.
+
+
+
+ Get Drivers by Status
+
+URL: http://localhost:8000/drivers/status/available
+Method: GET
+No headers or body.
+
+
+
+ Top 5 Drivers by Earnings
+
+URL: http://localhost:8000/drivers/top/earnings
+Method: GET
+No headers or body.
+
+
+
+ Top 5 Drivers by Trips
+
+URL: http://localhost:8000/drivers/top/trips
+Method: GET
+No headers or body.
+
+
+
+ Search Drivers by Name
+
+URL: http://localhost:8000/drivers/search?name=jam
+Method: GET
+No headers or body.
+
+
+
+ Reset Driver Stats
+
+URL: http://localhost:8000/drivers/<driverId>/reset-stats
+Method: PUT
+Header: Authorization: Bearer <token>
+No body.
+
+
+
+ 🚗 TRIPS (20 ENDPOINTS)
+
+ Create Trip
+
+URL: http://localhost:8000/trips
+Method: POST
+Header: Authorization: Bearer <token>
+Body:
+
+json
+{
+  "rider": "Sarah",
+  "pickup": "Lekki",
+  "dropoff": "Ikeja",
+  "driverId": "some-driver-id"
+}
+
+
+
+
+ Get All Trips
+
+URL: http://localhost:8000/trips
+Method: GET
+No headers or body.
+
+
+
+ Get Trip by ID
+
+URL: http://localhost:8000/trips/<tripId>
+Method: GET
+No headers or body.
+
+
+
+ Start Trip
+
+URL: http://localhost:8000/trips/<tripId>/start
+Method: PUT
+Header: Authorization: Bearer <token>
+No body.
+
+
+
+ Complete Trip
+
+URL: http://localhost:8000/trips/<tripId>/complete
+Method: PUT
+Header: Authorization: Bearer <token>
+No body.
+
+
+
+ Cancel Trip
+
+URL: http://localhost:8000/trips/<tripId>/cancel
+Method: PUT
+Header: Authorization: Bearer <token>
+No body.
+
+
+
+ Set Trip Fare
+
+URL: http://localhost:8000/trips/<tripId>/fare
+Method: PUT
+Header: Authorization: Bearer <token>
+Body:
+
+json
+{ "fare": 3000 }
+
+
+
+
+ Set Trip Distance
+
+URL: http://localhost:8000/trips/<tripId>/distance
+Method: PUT
+Header: Authorization: Bearer <token>
+Body:
+
+json
+{ "distance": 12.5 }
+
+
+
+
+ Set Trip Duration
+
+URL: http://localhost:8000/trips/<tripId>/duration
+Method: PUT
+Header: Authorization: Bearer <token>
+Body:
+
+json
+{ "duration": 22 }
+
+
+
+
+ Assign Driver
+
+URL: http://localhost:8000/trips/<tripId>/assign-driver
+Method: PUT
+Header: Authorization: Bearer <token>
+Body:
+
+json
+{ "driverId": "driver-id-value" }
+
+
+
+
+ Get Trips by Status
+
+URL: http://localhost:8000/trips/status/ongoing
+Method: GET
+No headers or body.
+
+
+
+ Get Trips for Driver
+
+URL: http://localhost:8000/trips/driver/<driverId>
+Method: GET
+No headers or body.
+
+
+
+ Get Trips Above Fare
+
+URL: http://localhost:8000/trips/fare/above/2000
+Method: GET
+No headers or body.
+
+
+
+ Count Pending Trips
+
+URL: http://localhost:8000/trips/pending/count
+Method: GET
+No headers or body.
+
+
+
+ Mass Cancel Pending Trips
+
+URL: http://localhost:8000/trips/mass-cancel
+Method: POST
+Header: Authorization: Bearer <token>
+No body.
+
+
+
+ Search Trips by Rider Name
+
+URL: http://localhost:8000/trips/search?rider=sarah
+Method: GET
+No headers or body.
+
+
+
+ Update Rider Name
+
+URL: http://localhost:8000/trips/<tripId>/rider
+Method: PUT
+Header: Authorization: Bearer <token>
+Body:
+
+json
+{ "rider": "New Rider" }
+
+
+
+
+ Delete Trip
+
+URL: http://localhost:8000/trips/<tripId>
+Method: DELETE
+Header: Authorization: Bearer <token>
+No body.
+
+
+
+ Top Trips by Fare
+
+URL: http://localhost:8000/trips/top/fare
+Method: GET
+No headers or body.
+
+
+
+ Trip Summary
+
+URL: http://localhost:8000/trips/summary
+Method: GET
+No headers or body.
+
+
+
+ 📊 LOGS & ANALYTICS (15 ENDPOINTS)
+
+ Log Event
+
+URL: http://localhost:8000/logs
+Method: POST
+Body:
+
+json
+{ "event": "Trip started", "driverId": "id123" }
+
+
+
+
+ Get Logs
+
+URL: http://localhost:8000/logs
+Method: GET
+No headers or body.
+
+
+
+ Delete All Logs
+
+URL: http://localhost:8000/logs
+Method: DELETE
+Header: Authorization: Bearer <token>
+No body.
+
+
+
+ Driver Stats Summary
+
+URL: http://localhost:8000/analytics/driver-stats
+Method: GET
+No headers or body.
+
+
+
+ Simulate Cache Refresh
+
+URL: http://localhost:8000/analytics/cache
+Method: POST
+Header: Authorization: Bearer <token>
+No body.
+
+
+
+ Submit Daily Report
+
+URL: http://localhost:8000/analytics/daily-report
+Method: POST
+Header: Authorization: Bearer <token>
+Body:
+
+json
+{ "earnings": 50000, "trips": 200 }
+
+
+
+
+ Get All Reports
+
+URL: http://localhost:8000/reports
+Method: GET
+Header: Authorization: Bearer <token>
+No body.
+
+
+
+ Delete All Reports
+
+URL: http://localhost:8000/reports
+Method: DELETE
+Header: Authorization: Bearer <token>
+No body.
+
+
+
+ Get Report by ID
+
+URL: http://localhost:8000/reports/<reportId>
+Method: GET
+Header: Authorization: Bearer <token>
+No body.
+
+
+
+✅ That’s all 50 — ready for Postman, docs, or frontend. Let me know if you want this in .txt or .json.
