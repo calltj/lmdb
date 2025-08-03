@@ -1,1 +1,7 @@
 node_modules/
+auth.js
+fake_users.csv
+node.py
+note.txt
+sync_logs.txt
+users.csv
