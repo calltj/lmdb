@@ -5,3 +5,5 @@ node.py
 note.txt
 sync_logs.txt
 users.csv
+.gitignore
+*.log
