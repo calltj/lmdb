@@ -2,8 +2,8 @@ node_modules/
 auth.js
 fake_users.csv
 node.py
-note.txt
+notes.txt
 sync_logs.txt
 users.csv
-.gitignore
+
 *.log
