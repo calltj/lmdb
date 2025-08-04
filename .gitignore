@@ -9,3 +9,4 @@ postman_guide_rivas_ecommerce.txt
 *.log
 fast-store.js
 npm
+.env
