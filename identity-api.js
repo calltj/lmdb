@@ -389,11 +389,11 @@ cron.schedule("51 11 * * *", () => {
 
     // Connect to MySQL
     mysqlConn = await mysql.createConnection({
-      host: "localhost",
-      user: "root",
-      password: "",
-      database: "testing_lmdb",
-      port: 3306,
+      host: "102.217.214.65",      
+      user: "tok9ja",              
+      password: "Stage9jaDB",      
+      database: "rubby_prospect",  
+      port: 7125, 
     });
     console.log("Connected to MySQL:", mysqlConn.config.database);
 
