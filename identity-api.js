@@ -7,6 +7,9 @@ const fs = require("fs");
 const cron = require("node-cron");
 const path = require("path");
 const { DateTime } = require("luxon");
+const { Client: PgClient } = require("pg");
+const Aerospike = require("aerospike");
+const cassandra = require("cassandra-driver");
 
 console.log("Nigeria time:", DateTime.now().setZone("Africa/Lagos").toISO());
 
@@ -86,6 +89,37 @@ async function query(appName, filter) {
       : ["SELECT * FROM users WHERE email = ?", [filter.email]];
     const [rows] = await mysqlConn.query(...sqlQuery);
     return rows[0] || null;
+  }
+
+  if (appName === "fast-store") {
+    // YugabyteDB query
+    const res = await yugaConn.query(
+      "SELECT * FROM users WHERE userId = $1 OR email = $2",
+      [filter.userId || "", filter.email || ""]
+    );
+    return res.rows[0] || null; // Return the first row or null if no results
+  }
+
+  if (appName === "aerostore") {
+    // Aerospike query
+    const key = new Aerospike.Key(
+      "test",
+      "users",
+      filter.userId || filter.email
+    );
+    try {
+      const rec = await aeroClient.get(key); // Get the user record
+      return rec.bins; // Return the record's bins (data)
+    } catch (err) {
+      return null; // Return null if record not found
+    }
+  }
+
+  if (appName === "scyllaapp") {
+    // ScyllaDB query
+    const q = "SELECT * FROM users WHERE userId = ?"; // Query template
+    const res = await scyllaConn.execute(q, [filter.userId], { prepare: true });
+    return res.rows[0] || null; // Return first result or null
   }
 
   return null;
@@ -240,6 +274,45 @@ async function fullSync(batchSize = 100) {
           { $set: safeValue },
           { upsert: true }
         );
+        if (appName === "fast-store") {
+          // Save to YugabyteDB
+          await yugaConn.query(
+            `INSERT INTO users (userId,name,email,age,balance,lastSyncedAt)
+         VALUES($1,$2,$3,$4,$5,$6) ON CONFLICT (userId) DO UPDATE
+         SET name=$2,age=$4,balance=$5,lastSyncedAt=$6`,
+            [
+              value.userId, // userId
+              value.name, // name
+              value.email, // email
+              value.age, // age
+              value.balance, // balance
+              value.lastSyncedAt, // last sync timestamp
+            ]
+          );
+        }
+
+        if (appName === "aerostore") {
+          // Save to Aerospike
+          const key = new Aerospike.Key("test", "users", value.userId);
+          await aeroClient.put(key, value); // Save the user record
+        }
+
+        if (appName === "scyllaapp") {
+          // Save to ScyllaDB
+          await scyllaConn.execute(
+            `INSERT INTO users (userId,name,email,age,balance,lastSyncedAt)
+         VALUES(?,?,?,?,?,?)`,
+            [
+              value.userId, // userId
+              value.name, // name
+              value.email, // email
+              value.age, // age
+              value.balance, // balance
+              value.lastSyncedAt, // last sync timestamp
+            ],
+            { prepare: true } // Prepared statement for performance
+          );
+        }
       } else {
         await mysqlConn.query(
           `INSERT INTO users (userId, name, email, age, balance)
@@ -323,6 +396,28 @@ cron.schedule("51 11 * * *", () => {
       port: 3306,
     });
     console.log("Connected to MySQL:", mysqlConn.config.database);
+
+    yugaConn = new PgClient({
+      host: "localhost", // YugabyteDB host
+      port: 5433, // Default port for YugabyteDB
+      user: "admin", // Your YugabyteDB username
+      password: "password", // Your YugabyteDB password
+      database: "faststore_db", // Your YugabyteDB database
+    });
+    await yugaConn.connect(); // Make that Yugabyte connection
+    console.log("✅ Connected to YugabyteDB");
+
+    aeroClient = await Aerospike.connect({
+      hosts: "127.0.0.1:3000", // Aerospike host and port
+    });
+    console.log("✅ Connected to Aerospike");
+
+    scyllaConn = new cassandra.Client({
+      contactPoints: ["127.0.0.1"], // ScyllaDB contact point
+      localDataCenter: "datacenter1", // ScyllaDB datacenter name
+      keyspace: "scylla_keyspace", // Your ScyllaDB keyspace
+    });
+    console.log("✅ Connected to ScyllaDB");
 
     // Decide which LMDBs to load based on time
     const nowNG = DateTime.now().setZone("Africa/Lagos");
