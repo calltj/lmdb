@@ -8,7 +8,7 @@ const cron = require("node-cron");
 const path = require("path");
 const { DateTime } = require("luxon");
 const { Client: PgClient } = require("pg");
-const Aerospike = require("aerospike");
+// const Aerospike = require("aerospike");
 const cassandra = require("cassandra-driver");
 require("dotenv").config();
 
@@ -101,20 +101,20 @@ async function query(appName, filter) {
     return res.rows[0] || null; // Return the first row or null if no results
   }
 
-  if (appName === "aerostore") {
-    // Aerospike query
-    const key = new Aerospike.Key(
-      "test",
-      "users",
-      filter.userId || filter.email
-    );
-    try {
-      const rec = await aeroClient.get(key); // Get the user record
-      return rec.bins; // Return the record's bins (data)
-    } catch (err) {
-      return null; // Return null if record not found
-    }
-  }
+  // if (appName === "aerostore") {
+  //   // Aerospike query
+  //   const key = new Aerospike.Key(
+  //     "test",
+  //     "users",
+  //     filter.userId || filter.email
+  //   );
+  //   try {
+  //     const rec = await aeroClient.get(key); // Get the user record
+  //     return rec.bins; // Return the record's bins (data)
+  //   } catch (err) {
+  //     return null; // Return null if record not found
+  //   }
+  // }
 
   if (appName === "scyllaapp") {
     // ScyllaDB query
@@ -292,11 +292,11 @@ async function fullSync(batchSize = 100) {
           );
         }
 
-        if (appName === "aerostore") {
-          // Save to Aerospike
-          const key = new Aerospike.Key("test", "users", value.userId);
-          await aeroClient.put(key, value); // Save the user record
-        }
+        // if (appName === "aerostore") {
+        //   // Save to Aerospike
+        //   const key = new Aerospike.Key("test", "users", value.userId);
+        //   await aeroClient.put(key, value); // Save the user record
+        // }
 
         if (appName === "scyllaapp") {
           // Save to ScyllaDB
@@ -408,10 +408,10 @@ cron.schedule("51 11 * * *", () => {
     await yugaConn.connect(); // Make that Yugabyte connection
     console.log("✅ Connected to YugabyteDB");
 
-    aeroClient = await Aerospike.connect({
-      hosts: "127.0.0.1:3000", // Aerospike host and port
-    });
-    console.log("✅ Connected to Aerospike");
+    // aeroClient = await Aerospike.connect({
+    //   hosts: "127.0.0.1:3000", // Aerospike host and port
+    // });
+    // console.log("✅ Connected to Aerospike");
 
     scyllaConn = new cassandra.Client({
       contactPoints: ["127.0.0.1"], // ScyllaDB contact point
