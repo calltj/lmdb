@@ -11,6 +11,7 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "aerospike": "^6.2.0",
     "axios": "^1.10.0",
     "bcrypt": "^6.0.0",
     "cassandra-driver": "^4.8.0",
@@ -26,7 +27,6 @@
     "mysql2": "^3.14.1",
     "node-cron": "^4.2.1",
     "pg": "^8.16.3",
-    "scylladb": "^0.0.1-c",
-    "aerospike": "^6.2.0"
+    "scylladb": "^0.0.1-c"
   }
 }

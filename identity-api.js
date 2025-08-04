@@ -10,6 +10,7 @@ const { DateTime } = require("luxon");
 const { Client: PgClient } = require("pg");
 const Aerospike = require("aerospike");
 const cassandra = require("cassandra-driver");
+require("dotenv").config();
 
 console.log("Nigeria time:", DateTime.now().setZone("Africa/Lagos").toISO());
 
@@ -389,20 +390,20 @@ cron.schedule("51 11 * * *", () => {
 
     // Connect to MySQL
     mysqlConn = await mysql.createConnection({
-      host: "102.217.214.65",      
-      user: "tok9ja",              
-      password: "Stage9jaDB",      
-      database: "rubby_prospect",  
-      port: 7125, 
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+      port: process.env.DB_PORT,
     });
     console.log("Connected to MySQL:", mysqlConn.config.database);
 
     yugaConn = new PgClient({
-      host: "localhost", // YugabyteDB host
-      port: 5433, // Default port for YugabyteDB
-      user: "admin", // Your YugabyteDB username
-      password: "password", // Your YugabyteDB password
-      database: "faststore_db", // Your YugabyteDB database
+      host: process.env.YUGA_HOST,
+      port: process.env.YUGA_PORT,
+      user: process.env.YUGA_USER,
+      password: process.env.YUGA_PASSWORD,
+      database: process.env.YUGA_DB,
     });
     await yugaConn.connect(); // Make that Yugabyte connection
     console.log("✅ Connected to YugabyteDB");
