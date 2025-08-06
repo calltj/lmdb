@@ -384,7 +384,7 @@ cron.schedule("51 11 * * *", () => {
 (async () => {
   try {
     // Connect to MongoDB
-    const mongoClient = new MongoClient("mongodb://localhost:27017");
+    const mongoClient = new MongoClient(process.env.MONGO_URI);
     await mongoClient.connect();
     mongoCollection = mongoClient.db("rivas_db").collection("users");
 
